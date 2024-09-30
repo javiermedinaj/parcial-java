@@ -1,0 +1,145 @@
+public class Pelicula {
+    private String titulo;
+    private String nombreCliente;
+
+    public Pelicula(String titulo) {
+        this.titulo = titulo;
+        this.nombreCliente = ""; // Inicialmente, el nombre del cliente es una cadena vacía
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void presta(String cliente) {
+        this.nombreCliente = cliente;
+    }
+
+    public void devuelve() {
+        this.nombreCliente = "";
+    }
+}
+
+
+clase videoclub 
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class VideoClub {
+    private List<Pelicula> accion;
+    private List<Pelicula> suspenso;
+    private List<Pelicula> comedia;
+    private List<Pelicula> drama;
+
+    public VideoClub() {
+        accion = new ArrayList<>();
+        suspenso = new ArrayList<>();
+        comedia = new ArrayList<>();
+        drama = new ArrayList<>();
+    }
+
+    public void anadePelicula(Pelicula pelicula, String genero) {
+        if (buscaPelicula(pelicula.getTitulo(), genero) == null) {
+            switch (genero.toLowerCase()) {
+                case "accion":
+                    accion.add(pelicula);
+                    break;
+                case "suspenso":
+                    suspenso.add(pelicula);
+                    break;
+                case "comedia":
+                    comedia.add(pelicula);
+                    break;
+                case "drama":
+                    drama.add(pelicula);
+                    break;
+                default:
+                    System.out.println("Género no válido.");
+            }
+        } else {
+            System.out.println("La película ya existe en el catálogo.");
+        }
+    }
+
+    private Pelicula buscaPelicula(String titulo, String genero) {
+        List<Pelicula> lista = getListaPorGenero(genero);
+        for (Pelicula pelicula : lista) {
+            if (pelicula.getTitulo().equalsIgnoreCase(titulo)) {
+                return pelicula;
+            }
+        }
+        return null;
+    }
+
+    public void prestaPelicula(String titulo, String genero, String cliente) {
+        Pelicula pelicula = buscaPelicula(titulo, genero);
+        if (pelicula != null) {
+            pelicula.presta(cliente);
+        } else {
+            System.out.println("La película no existe en el catálogo.");
+        }
+    }
+
+    public void eliminaPelicula(String titulo, String genero) {
+        Pelicula pelicula = buscaPelicula(titulo, genero);
+        if (pelicula != null) {
+            getListaPorGenero(genero).remove(pelicula);
+        } else {
+            System.out.println("La película no existe en el catálogo.");
+        }
+    }
+
+    public void devuelvePelicula(String titulo, String genero) {
+        Pelicula pelicula = buscaPelicula(titulo, genero);
+        if (pelicula != null) {
+            pelicula.devuelve();
+        } else {
+            System.out.println("La película no existe en el catálogo.");
+        }
+    }
+
+    private List<Pelicula> getListaPorGenero(String genero) {
+        switch (genero.toLowerCase()) {
+            case "accion":
+                return accion;
+            case "suspenso":
+                return suspenso;
+            case "comedia":
+                return comedia;
+            case "drama":
+                return drama;
+            default:
+                return null;
+        }
+    }
+}
+
+clase main 
+
+public class Main {
+    public static void main(String[] args) {
+        VideoClub videoClub = new VideoClub();
+
+        // Añadir películas
+        videoClub.anadePelicula(new Pelicula("Rápido y Furioso"), "accion");
+        videoClub.anadePelicula(new Pelicula("El Silencio de los Corderos"), "suspenso");
+        videoClub.anadePelicula(new Pelicula("Superbad"), "comedia");
+        videoClub.anadePelicula(new Pelicula("La La Land"), "drama");
+
+        // Prestar una película
+        videoClub.prestaPelicula("Rápido y Furioso", "accion", "Juan Pérez");
+
+        // Devolver una película
+        videoClub.devuelvePelicula("Rápido y Furioso", "accion");
+
+        // Eliminar una película
+        videoClub.eliminaPelicula("El Silencio de los Corderos", "suspenso");
+    }
+}
+
+
